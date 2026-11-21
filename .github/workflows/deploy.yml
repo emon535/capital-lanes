@@ -52,6 +52,7 @@ jobs:
         run: pnpm build
         env:
           NEXT_TELEMETRY_DISABLED: "1"
+          NEXT_PUBLIC_SITE_URL: https://capitallanes.co.uk
 
       - name: Package the site
         run: |

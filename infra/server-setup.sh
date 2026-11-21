@@ -11,11 +11,11 @@
 #   - installs the site service (systemd), the Nginx site and deploy.sh
 #
 # After this: point DNS at the server, then run
-#   certbot --nginx -d capitallanes.com -d www.capitallanes.com
+#   certbot --nginx -d capitallanes.co.uk -d www.capitallanes.co.uk
 set -euo pipefail
 
 DEPLOY_PUBKEY="${1:-}"
-DOMAIN="capitallanes.com"
+DOMAIN="capitallanes.co.uk"
 APP_DIR="/var/www/capitallanes"
 ENV_DIR="/etc/capitallanes"
 SERVICE="capitallanes-web"

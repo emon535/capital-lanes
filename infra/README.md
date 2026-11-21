@@ -1,4 +1,4 @@
-# Deploying capitallanes.com
+# Deploying capitallanes.co.uk
 
 ```
 git push (main) ──► GitHub Actions: wording check, tests, type check, build
@@ -28,7 +28,7 @@ Local development keeps using `apps/web/.env.local`, which is gitignored.
 3. Add `DEPLOY_HOST` and `DEPLOY_SSH_KEY` to the GitHub repo secrets, then push to `main`
    (or run the workflow from the Actions tab).
 4. DNS at Namecheap: A records `@` and `www` → server IP.
-5. Once DNS works: `certbot --nginx -d capitallanes.com -d www.capitallanes.com --redirect`
+5. Once DNS works: `certbot --nginx -d capitallanes.co.uk -d www.capitallanes.co.uk --redirect`
    (renews by itself).
 
 ## Everyday
