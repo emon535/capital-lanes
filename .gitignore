@@ -1,0 +1,22 @@
+node_modules/
+.next/
+out/
+dist/
+coverage/
+*.tsbuildinfo
+.DS_Store
+*.log
+
+# Secrets. This repo is PUBLIC: never commit keys.
+.env
+.env.*
+!.env.example
+client_secret*.json
+*.pem
+*.key
+id_rsa*
+id_ed25519*
+deploy_key*
+
+# Private business notes, kept off the public repo
+research/

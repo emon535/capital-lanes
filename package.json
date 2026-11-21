@@ -1,0 +1,14 @@
+{
+  "name": "capitallanes",
+  "private": true,
+  "packageManager": "pnpm@10.28.0",
+  "engines": { "node": ">=22" },
+  "scripts": {
+    "dev": "pnpm --filter @capitallanes/web dev",
+    "build": "pnpm --filter @capitallanes/web build",
+    "start": "pnpm --filter @capitallanes/web start",
+    "test": "pnpm -r test",
+    "typecheck": "pnpm -r typecheck",
+    "check:wording": "node scripts/check-wording.mjs"
+  }
+}

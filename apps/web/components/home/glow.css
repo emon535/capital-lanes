@@ -1,0 +1,363 @@
+/* Homepage light and glow layer. Black and logo gold only.
+   Everything here is decorative; all motion stops under prefers-reduced-motion (bottom of file). */
+
+/* ---------- Car lights (components/home/Car.tsx) ---------- */
+.cl-head-glow,
+.cl-tail-glow {
+  opacity: 0.35;
+  transition: opacity 0.4s ease;
+}
+.cl-head {
+  filter: drop-shadow(0 0 3px rgba(255, 244, 207, 0.9));
+}
+.cl-beam {
+  transition: opacity 0.5s ease;
+}
+
+/* Hero car: lights breathe softly, as if idling at the kerb */
+.hero-scene .cl-head-glow {
+  opacity: 0.9;
+  animation: cl-breathe 4.8s ease-in-out infinite;
+}
+.hero-scene .cl-tail-glow {
+  opacity: 0.8;
+  animation: cl-breathe 4.8s ease-in-out infinite reverse;
+}
+.hero-scene .cl-beam-hero {
+  animation: cl-beam 4.8s ease-in-out infinite;
+}
+@keyframes cl-breathe {
+  0%,
+  100% {
+    opacity: 0.6;
+  }
+  50% {
+    opacity: 1;
+  }
+}
+@keyframes cl-beam {
+  0%,
+  100% {
+    opacity: 0.45;
+  }
+  50% {
+    opacity: 0.7;
+  }
+}
+
+/* Fleet: headlights switch on when a card is hovered or focused; the featured car is always lit */
+.carc .cl-head-glow,
+.carc .cl-tail-glow {
+  opacity: 0.15;
+}
+.carc:hover .cl-head-glow,
+.carc:focus-within .cl-head-glow,
+.carc.feat .cl-head-glow {
+  opacity: 1;
+}
+.carc:hover .cl-tail-glow,
+.carc:focus-within .cl-tail-glow,
+.carc.feat .cl-tail-glow {
+  opacity: 0.8;
+}
+.carc:hover .cl-beam,
+.carc:focus-within .cl-beam,
+.carc.feat .cl-beam {
+  opacity: 0.5;
+}
+.carc .pic {
+  position: relative;
+}
+.carc .pic::before {
+  /* soft pool of light under each car */
+  content: "";
+  position: absolute;
+  left: 15%;
+  right: 15%;
+  bottom: 12px;
+  height: 36px;
+  border-radius: 50%;
+  background: radial-gradient(closest-side, rgba(212, 176, 106, 0.16), transparent);
+  opacity: 0;
+  transition: opacity 0.5s ease;
+}
+.carc:hover .pic::before,
+.carc.feat .pic::before {
+  opacity: 1;
+}
+.carc {
+  transition:
+    border-color 0.3s,
+    box-shadow 0.4s;
+}
+.carc:hover {
+  box-shadow: 0 30px 80px -40px rgba(212, 176, 106, 0.35);
+}
+.carc.feat {
+  animation: gl-feat 5s ease-in-out infinite;
+}
+@keyframes gl-feat {
+  0%,
+  100% {
+    box-shadow:
+      0 0 0 1px rgba(212, 176, 106, 0.1),
+      0 30px 90px -45px rgba(212, 176, 106, 0.25);
+  }
+  50% {
+    box-shadow:
+      0 0 0 1px rgba(212, 176, 106, 0.25),
+      0 30px 90px -35px rgba(212, 176, 106, 0.45);
+  }
+}
+
+/* ---------- Hero scene ---------- */
+/* Lane markings stream past behind the car */
+.hero-scene .lane {
+  animation: gl-lane 1.6s linear infinite;
+}
+@keyframes gl-lane {
+  to {
+    background-position: -160px 0;
+  }
+}
+/* A few windows in the skyline switch on and off, slowly */
+.hero-scene .sky rect[fill="#F2EFEA"]:nth-of-type(13n) {
+  animation: gl-window 11s steps(1) infinite;
+}
+.hero-scene .sky rect[fill="#F2EFEA"]:nth-of-type(17n) {
+  animation: gl-window 14s steps(1) infinite 3s;
+}
+.hero-scene .sky rect[fill="#F2EFEA"]:nth-of-type(29n) {
+  fill: #ebd3a0;
+}
+@keyframes gl-window {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  40% {
+    opacity: 0.15;
+  }
+  70% {
+    opacity: 1;
+  }
+}
+
+/* ---------- Buttons: gold sheen ---------- */
+.btn-gold {
+  position: relative;
+  overflow: hidden;
+  isolation: isolate;
+  transition:
+    filter 0.2s,
+    box-shadow 0.35s;
+}
+.btn-gold::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background: linear-gradient(105deg, transparent 35%, rgba(255, 250, 235, 0.55) 50%, transparent 65%);
+  transform: translateX(-120%);
+  pointer-events: none;
+}
+.btn-gold:hover {
+  box-shadow: 0 12px 40px -10px rgba(212, 176, 106, 0.55);
+}
+.btn-gold:hover::after {
+  transform: translateX(120%);
+  transition: transform 0.9s ease;
+}
+/* Primary calls to action catch the light every few seconds on their own */
+.hero-copy .btn-gold::after,
+.cta .btn-gold::after,
+.band .btn-gold::after {
+  animation: gl-sheen 7s ease-in-out infinite 2s;
+}
+@keyframes gl-sheen {
+  0%,
+  78% {
+    transform: translateX(-120%);
+  }
+  92%,
+  100% {
+    transform: translateX(120%);
+  }
+}
+.btn-dark:hover,
+.btn-ghost:hover {
+  box-shadow: 0 0 0 1px rgba(212, 176, 106, 0.25), 0 10px 30px -12px rgba(212, 176, 106, 0.35);
+}
+
+/* ---------- Closing logo: a slow shimmer across the gold ---------- */
+.cta .logo-shine {
+  position: relative;
+  width: 300px;
+  max-width: 80%;
+  margin: 0 auto 40px;
+  filter: drop-shadow(0 0 28px rgba(212, 176, 106, 0.18));
+}
+.cta .logo-shine img {
+  width: 100%;
+  max-width: 100%;
+  margin: 0;
+}
+.cta .logo-shine::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  -webkit-mask: url(/brand/logo-full.png) center / contain no-repeat;
+  mask: url(/brand/logo-full.png) center / contain no-repeat;
+  background: linear-gradient(110deg, transparent 42%, rgba(255, 249, 230, 0.85) 50%, transparent 58%) no-repeat;
+  background-size: 300% 100%;
+  background-position: 120% 0;
+  mix-blend-mode: screen;
+  animation: gl-logo 8s ease-in-out infinite 1s;
+}
+@keyframes gl-logo {
+  0%,
+  60% {
+    background-position: 120% 0;
+  }
+  85%,
+  100% {
+    background-position: -20% 0;
+  }
+}
+
+/* ---------- Ambient glows ---------- */
+.band::before {
+  content: "";
+  position: absolute;
+  width: 720px;
+  height: 720px;
+  left: -220px;
+  top: 50%;
+  margin-top: -360px;
+  border-radius: 50%;
+  background: radial-gradient(closest-side, rgba(212, 176, 106, 0.09), transparent);
+  pointer-events: none;
+  animation: gl-drift 16s ease-in-out infinite alternate;
+}
+@keyframes gl-drift {
+  to {
+    transform: translate(140px, -40px) scale(1.12);
+  }
+}
+.calc {
+  box-shadow: 0 40px 100px -50px rgba(212, 176, 106, 0.3);
+}
+.calc .lock svg {
+  filter: drop-shadow(0 0 6px rgba(212, 176, 106, 0.5));
+}
+.strip svg,
+.rev .stars svg {
+  filter: drop-shadow(0 0 5px rgba(212, 176, 106, 0.35));
+}
+.route {
+  transition:
+    border-color 0.3s,
+    box-shadow 0.4s;
+}
+.route:hover {
+  border-color: rgba(212, 176, 106, 0.45);
+  box-shadow: 0 30px 80px -40px rgba(212, 176, 106, 0.35);
+}
+.steps .n {
+  text-shadow: 0 0 24px rgba(212, 176, 106, 0.35);
+}
+
+/* ---------- App teaser: live location ---------- */
+.phones .halo {
+  background: radial-gradient(circle, rgba(212, 176, 106, 0.14), #1d1d1d 38%, transparent 68%);
+  animation: gl-halo 6s ease-in-out infinite;
+}
+@keyframes gl-halo {
+  0%,
+  100% {
+    opacity: 0.75;
+    transform: translate(-50%, -50%) scale(0.96);
+  }
+  50% {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1.04);
+  }
+}
+.live-car {
+  offset-rotate: 0deg;
+  offset-distance: 50%;
+  animation: gl-drive 12s cubic-bezier(0.45, 0, 0.55, 1) infinite;
+}
+@keyframes gl-drive {
+  0% {
+    offset-distance: 0%;
+  }
+  85%,
+  100% {
+    offset-distance: 100%;
+  }
+}
+.live-trail {
+  stroke-dasharray: 100 100;
+  stroke-dashoffset: 50;
+  filter: drop-shadow(0 0 4px rgba(212, 176, 106, 0.8));
+  animation: gl-trail 12s cubic-bezier(0.45, 0, 0.55, 1) infinite;
+}
+@keyframes gl-trail {
+  0% {
+    stroke-dashoffset: 100;
+  }
+  85%,
+  100% {
+    stroke-dashoffset: 0;
+  }
+}
+.live-car-halo,
+.live-pin-pulse {
+  transform-box: fill-box;
+  transform-origin: center;
+}
+.live-car-halo {
+  animation: gl-ping 1.8s ease-out infinite;
+}
+.live-pin-pulse {
+  animation: gl-ping 2.4s ease-out infinite;
+}
+@keyframes gl-ping {
+  0% {
+    transform: scale(0.7);
+    opacity: 0.6;
+  }
+  100% {
+    transform: scale(2);
+    opacity: 0;
+  }
+}
+
+/* ---------- No motion: keep the light, drop the movement ---------- */
+@media (prefers-reduced-motion: reduce) {
+  .hero-scene .cl-head-glow,
+  .hero-scene .cl-tail-glow,
+  .hero-scene .cl-beam-hero,
+  .carc.feat,
+  .hero-scene .lane,
+  .hero-scene .sky rect,
+  .btn-gold::after,
+  .cta .logo-shine::after,
+  .band::before,
+  .phones .halo,
+  .live-car,
+  .live-trail,
+  .live-car-halo,
+  .live-pin-pulse {
+    animation: none !important;
+  }
+  .btn-gold:hover::after {
+    transition: none;
+  }
+  .live-car-halo,
+  .live-pin-pulse {
+    opacity: 0.25;
+  }
+}

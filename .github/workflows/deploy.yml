@@ -1,0 +1,109 @@
+# Build on GitHub (not on the 2 GB server), then ship the ready-to-run site
+# to the VPS over SSH. See infra/README.md.
+#
+# Repository secrets used (Settings > Secrets and variables > Actions):
+#   DEPLOY_HOST     server IP address, e.g. 203.0.113.10
+#   DEPLOY_SSH_KEY  private key whose public half is in /home/deploy/.ssh/authorized_keys
+# Until DEPLOY_HOST is set, the workflow only checks and builds.
+#
+# API keys (Google Maps, Anthropic) are NOT here: they live only on the server
+# in /etc/capitallanes/web.env and are read when the site starts.
+
+name: Check, build and deploy
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+concurrency:
+  group: deploy-${{ github.ref }}
+  cancel-in-progress: false
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: pnpm/action-setup@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: .nvmrc
+          cache: pnpm
+
+      - run: pnpm install --frozen-lockfile
+
+      - name: Wording check
+        run: pnpm check:wording
+
+      - name: Tests
+        run: pnpm test
+
+      - name: Type check
+        run: pnpm typecheck
+
+      - name: Build
+        run: pnpm build
+        env:
+          NEXT_TELEMETRY_DISABLED: "1"
+
+      - name: Package the site
+        run: |
+          set -euo pipefail
+          S=apps/web/.next/standalone
+          cp -r apps/web/.next/static "$S/apps/web/.next/static"
+          cp -r apps/web/public "$S/apps/web/public"
+          # Never ship secrets, even by accident.
+          if find "$S" -name '.env*' -not -path '*/node_modules/*' | grep -q .; then
+            echo "A .env file ended up in the build. Refusing to package it." >&2
+            exit 1
+          fi
+          tar -czf site.tgz -C "$S" .
+          ls -lh site.tgz
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: site
+          path: site.tgz
+          retention-days: 7
+
+  deploy:
+    needs: build
+    if: github.event_name != 'pull_request' && github.ref == 'refs/heads/main'
+    runs-on: ubuntu-24.04
+    environment: production
+    env:
+      DEPLOY_HOST: ${{ secrets.DEPLOY_HOST }}
+    steps:
+      - name: Skip if the server is not set up yet
+        if: env.DEPLOY_HOST == ''
+        run: echo "::notice::DEPLOY_HOST secret not set, so nothing was deployed."
+
+      - uses: actions/download-artifact@v4
+        if: env.DEPLOY_HOST != ''
+        with:
+          name: site
+
+      - name: Set up SSH
+        if: env.DEPLOY_HOST != ''
+        run: |
+          set -euo pipefail
+          mkdir -p ~/.ssh && chmod 700 ~/.ssh
+          printf '%s\n' "${{ secrets.DEPLOY_SSH_KEY }}" > ~/.ssh/deploy_key
+          chmod 600 ~/.ssh/deploy_key
+          ssh-keyscan -T 15 -H "$DEPLOY_HOST" >> ~/.ssh/known_hosts 2>/dev/null
+
+      - name: Upload and switch to the new version
+        if: env.DEPLOY_HOST != ''
+        run: |
+          set -euo pipefail
+          SSH="ssh -i ~/.ssh/deploy_key -o BatchMode=yes deploy@$DEPLOY_HOST"
+          RELEASE="$(date -u +%Y%m%d%H%M%S)-${GITHUB_SHA::7}"
+          scp -i ~/.ssh/deploy_key -o BatchMode=yes site.tgz "deploy@$DEPLOY_HOST:/tmp/site-$RELEASE.tgz"
+          $SSH "/var/www/capitallanes/deploy.sh $RELEASE"
