@@ -23,6 +23,7 @@ import { ScrollRoad } from "@/components/home/ScrollRoad";
 import "@/components/home/glow.css";
 import { SiteFooter, SiteNav } from "@/components/home/SiteChrome";
 import { Skyline } from "@/components/home/Skyline";
+import { WhatsAppCta } from "@/components/home/ContactCta";
 import {
   COMPANY,
   CONTACT,
@@ -109,6 +110,7 @@ export default function HomePage() {
                 View the fleet
               </Link>
             </div>
+            <WhatsAppCta />
             <ul className="ticks">
               {["Fixed, all-in fare", "Flight tracked", "Free cancellation 24 h"].map((t) => (
                 <li key={t} className="text-gold">

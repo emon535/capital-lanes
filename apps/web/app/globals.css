@@ -1452,3 +1452,111 @@ body {
   font-size: 13px;
   color: var(--color-t2);
 }
+
+/* WhatsApp / call CTA (hero) */
+.wa-cta {
+  margin-top: 30px;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 14px 26px;
+}
+.wa-main {
+  display: inline-flex;
+  align-items: center;
+  gap: 16px;
+  padding: 14px 24px 14px 16px;
+  border: 1px solid rgba(212, 176, 106, 0.55);
+  background: linear-gradient(135deg, rgba(212, 176, 106, 0.12), rgba(212, 176, 106, 0.02));
+  transition: border-color 0.2s, background 0.2s;
+}
+.wa-main:hover {
+  border-color: var(--color-gold);
+  background: linear-gradient(135deg, rgba(212, 176, 106, 0.2), rgba(212, 176, 106, 0.05));
+}
+.wa-icon {
+  display: grid;
+  place-items: center;
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #ebd3a0, #b98f4a);
+  color: #0a0a0a;
+  flex: none;
+}
+.wa-text {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.wa-label {
+  font-size: 11px;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--color-gold-light);
+}
+.wa-number {
+  font-family: var(--font-serif);
+  font-size: 30px;
+  line-height: 1;
+  color: var(--color-t1);
+  letter-spacing: 0.02em;
+  white-space: nowrap;
+}
+.wa-call {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 14px;
+  color: var(--color-t2);
+}
+.wa-call:hover {
+  color: var(--color-gold-light);
+}
+
+/* Fixed call / WhatsApp bar on phones */
+.m-contact {
+  display: none;
+}
+@media (max-width: 767px) {
+  .m-contact {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+    position: fixed;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 50;
+    padding: 10px 12px calc(10px + env(safe-area-inset-bottom));
+    background: rgba(5, 5, 5, 0.92);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border-top: 1px solid rgba(212, 176, 106, 0.3);
+  }
+  .m-contact a {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    min-height: 50px;
+    font-size: 13px;
+    font-weight: 600;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+  }
+  .m-call {
+    border: 1px solid rgba(212, 176, 106, 0.5);
+    color: var(--color-gold-light);
+  }
+  .m-wa {
+    background: linear-gradient(135deg, #ebd3a0, #b98f4a);
+    color: #0a0a0a;
+  }
+  body {
+    padding-bottom: calc(72px + env(safe-area-inset-bottom));
+  }
+  .wa-number {
+    font-size: 26px;
+  }
+}

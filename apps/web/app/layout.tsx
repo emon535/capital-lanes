@@ -1,6 +1,7 @@
 import type { Metadata, Viewport } from "next";
 import { Cormorant_Garamond, Inter } from "next/font/google";
 import { COMPANY, SITE_URL } from "@/content/site";
+import { MobileContactBar } from "@/components/home/ContactCta";
 import "./globals.css";
 
 const inter = Inter({
@@ -43,7 +44,10 @@ export const viewport: Viewport = {
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en-GB" className={`${inter.variable} ${cormorant.variable}`}>
-      <body>{children}</body>
+      <body>
+        {children}
+        <MobileContactBar />
+      </body>
     </html>
   );
 }

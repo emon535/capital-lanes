@@ -68,7 +68,10 @@ export const CONTACT = {
   phoneE164: "+442045099331",
   mobileDisplay: "07514 347772",
   mobileHref: "tel:+447514347772",
-  whatsappHref: "https://wa.me/447514347772",
+  whatsappDisplay: "+44 7514 347772",
+  whatsappHref: `https://wa.me/447514347772?text=${encodeURIComponent(
+    "Hello Capital Lane, I would like to book an airport transfer.",
+  )}`,
   // Placeholders: clearly marked until Capital Lane Ltd supplies the real details.
   companyNumber: "[company no. to add]",
   operatorLicence: "[TfL operator licence no. to add]",
