@@ -18,9 +18,9 @@ export function SiteNav() {
           <Link href="/#contact">Contact</Link>
         </div>
         <div className="nav-right">
-          <span className="nav-phone" title={CONTACT.phoneNote}>
+          <a className="nav-phone" href={CONTACT.phoneHref}>
             {CONTACT.phoneDisplay}
-          </span>
+          </a>
           <Link href="/#quote" className="btn btn-ghost">
             Get a quote
           </Link>
@@ -43,8 +43,15 @@ export function SiteFooter() {
             <p style={{ marginTop: 22, lineHeight: 1.75, maxWidth: 300 }}>
               Pre-booked chauffeur airport transfers from Canary Wharf and Docklands.
             </p>
-            <p style={{ marginTop: 14 }}>
-              Phone: {CONTACT.phoneDisplay} <span className="placeholder-tag">Placeholder</span>
+            <p style={{ marginTop: 14, lineHeight: 1.9 }}>
+              Phone: <a href={CONTACT.phoneHref}>{CONTACT.phoneDisplay}</a>
+              <br />
+              Mobile: <a href={CONTACT.mobileHref}>{CONTACT.mobileDisplay}</a>
+              <br />
+              WhatsApp:{" "}
+              <a href={CONTACT.whatsappHref} target="_blank" rel="noopener noreferrer">
+                Message us
+              </a>
             </p>
           </div>
           <div>

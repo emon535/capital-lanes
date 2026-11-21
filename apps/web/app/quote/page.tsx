@@ -151,7 +151,8 @@ export default async function QuotePage({ searchParams }: { searchParams: SP }) 
                     Change journey
                   </Link>
                 </div>
-                <p className="note">Online booking is coming soon. Call {CONTACT.phoneDisplay} to book now.</p>
+                <p className="note">Online booking is coming soon. Call <a href={CONTACT.phoneHref}>{CONTACT.phoneDisplay}</a> or{" "}
+                  <a href={CONTACT.whatsappHref} target="_blank" rel="noopener noreferrer">message us on WhatsApp</a> to book now.</p>
               </div>
             </section>
           ) : (
@@ -175,7 +176,7 @@ export default async function QuotePage({ searchParams }: { searchParams: SP }) 
                     {result.reason === "NO_ROUTE"
                       ? "Please check both addresses, or pick one from the suggestions as you type."
                       : "Our live route pricing is offline. Fixed fares from Canary Wharf (E14) to Heathrow and Gatwick still work."}{" "}
-                    You can also call us on {CONTACT.phoneDisplay} for a price.
+                    You can also call us on <a href={CONTACT.phoneHref}>{CONTACT.phoneDisplay}</a> for a price.
                   </p>
                 </div>
               )}

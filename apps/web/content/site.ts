@@ -62,10 +62,14 @@ export const HOW_IT_WORKS = [
   },
 ] as const;
 
-// Placeholders: clearly marked until Capital Lane Ltd supplies the real details.
 export const CONTACT = {
-  phoneDisplay: "020 XXXX XXXX",
-  phoneNote: "Placeholder number",
+  phoneDisplay: "020 4509 9331",
+  phoneHref: "tel:+442045099331",
+  phoneE164: "+442045099331",
+  mobileDisplay: "07514 347772",
+  mobileHref: "tel:+447514347772",
+  whatsappHref: "https://wa.me/447514347772",
+  // Placeholders: clearly marked until Capital Lane Ltd supplies the real details.
   companyNumber: "[company no. to add]",
   operatorLicence: "[TfL operator licence no. to add]",
 } as const;

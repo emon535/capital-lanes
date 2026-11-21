@@ -25,6 +25,7 @@ import { SiteFooter, SiteNav } from "@/components/home/SiteChrome";
 import { Skyline } from "@/components/home/Skyline";
 import {
   COMPANY,
+  CONTACT,
   HOW_IT_WORKS,
   PROMISE,
   ROUTES,
@@ -43,6 +44,7 @@ const jsonLd = {
   url: SITE_URL,
   description: COMPANY.tagline,
   areaServed: "London",
+  telephone: CONTACT.phoneE164,
 };
 
 const PROMISE_ICONS = [Pound, Clock, Plane, Board, Calendar, Seat];
