@@ -148,6 +148,10 @@ systemctl daemon-reload
 systemctl enable "$SERVICE"
 
 echo "==> Nginx"
+install -d -m 755 "$APP_DIR/maintenance"
+cat > "$APP_DIR/maintenance/index.html" <<'EOF'
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Capital Lane</title><meta name="robots" content="noindex"><style>body{margin:0;min-height:100vh;display:grid;place-items:center;background:#0b0b0c;color:#e8e2d0;font:18px/1.5 system-ui,sans-serif;text-align:center}h1{color:#c9a54a;font-weight:600;letter-spacing:.04em}</style></head><body><main><h1>Capital Lane</h1><p>Chauffeur-driven airport transfers.<br>Our new website is on its way.</p></main></body></html>
+EOF
 cat > /etc/nginx/conf.d/capitallanes-limits.conf <<'EOF'
 # Slow down abuse of the paid APIs (Anthropic, Google).
 limit_req_zone $binary_remote_addr zone=cl_ask:10m rate=6r/m;
@@ -163,6 +167,14 @@ server {
 
     client_max_body_size 1m;
     gzip on;
+
+    # Shown while the site is starting or not yet deployed.
+    error_page 502 503 504 /maintenance.html;
+    location = /maintenance.html {
+        root $APP_DIR/maintenance;
+        try_files /index.html =404;
+        internal;
+    }
     gzip_types text/css application/javascript application/json image/svg+xml;
 
     location /api/ask {
