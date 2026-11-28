@@ -1,8 +1,9 @@
-import { VEHICLE_CLASSES, VEHICLE_LABELS } from "@capitallanes/pricing";
+import { FIRST_RIDE_DISCOUNT_PERCENT } from "@capitallanes/pricing";
+import { PassengerCarFields } from "@/components/PassengerCarFields";
 import { JourneyFields, WhenFields } from "@/components/PlaceField";
 import { QuoteTabs } from "@/components/QuoteTabs";
 import { askEnabled } from "@/lib/ask";
-import { Arrow, Calendar, Check, Clock, Person, Pin, Plane } from "./Icons";
+import { Arrow, Calendar, Check, Clock, Gift, Person, Pin, Plane, Users } from "./Icons";
 
 /**
  * Homepage quote box. Shows no prices: it sends the journey details to /quote,
@@ -14,6 +15,11 @@ export function QuoteForm() {
       <div className="top">
         <h2 id="quote-title">Get your fixed price</h2>
         <p className="sub">Instant quote. No account, no obligation.</p>
+        {FIRST_RIDE_DISCOUNT_PERCENT > 0 && (
+          <p className="first-ride">
+            <Gift size={16} /> New customers: {FIRST_RIDE_DISCOUNT_PERCENT}% off your first ride
+          </p>
+        )}
       </div>
       <QuoteTabs askEnabled={askEnabled()}>
       <form action="/quote" method="get" className="body" aria-labelledby="quote-title">
@@ -21,22 +27,7 @@ export function QuoteForm() {
 
         <WhenFields idPrefix="q" dateIcon={<Calendar />} timeIcon={<Clock />} />
 
-        <div className="qf">
-          <Person />
-          <div className="field">
-            <label htmlFor="q-car">Car class</label>
-            <select id="q-car" name="car" required defaultValue="standard">
-              <option value="" disabled>
-                Standard to Luxury
-              </option>
-              {VEHICLE_CLASSES.map((v) => (
-                <option key={v} value={v}>
-                  {VEHICLE_LABELS[v]}
-                </option>
-              ))}
-            </select>
-          </div>
-        </div>
+        <PassengerCarFields idPrefix="q" paxIcon={<Users />} carIcon={<Person />} />
 
         <button type="submit" className="btn btn-gold">
           Calculate my price <Arrow />

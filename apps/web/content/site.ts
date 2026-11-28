@@ -4,7 +4,7 @@
 export const COMPANY = {
   legalName: "Capital Lane Ltd",
   brandName: "Capital Lane",
-  tagline: "Chauffeur-driven airport transfers from Canary Wharf",
+  tagline: "Private executive transfers and chauffeur-driven airport journeys in London",
   // TODO(Emon): add TfL operator licence number and Companies House number before launch.
 } as const;
 
@@ -37,12 +37,61 @@ export const PROMISE = [
   },
 ] as const;
 
-export const VEHICLE_DESCRIPTIONS = {
-  standard: "A comfortable, clean saloon for everyday airport runs.",
-  "business-comfort": "A newer premium saloon with extra legroom and boot space.",
-  executive: "An executive car for business travel and a quieter ride.",
-  luxury: "Our top-tier car for special occasions and VIP travel.",
+// Fleet photos: representative royalty-free photos from Unsplash (free for commercial use,
+// https://unsplash.com/license), hot-linked from Unsplash's image CDN. Swap for photos of
+// Capital Lane's own cars when they are ready: put them in public/fleet/ and change `photo`.
+const unsplash = (id: string) => `https://images.unsplash.com/${id}`;
+
+export const VEHICLES = {
+  standard: {
+    model: "Saloon",
+    description: "A clean, comfortable saloon for everyday journeys and airport runs.",
+    photo: unsplash("photo-1547731034-4c72e102212c"),
+    photoAlt: "Black saloon car, side view",
+    crop: "",
+    credit: "Arteum.ro on Unsplash",
+  },
+  "business-comfort": {
+    model: "Premium saloon",
+    description: "A newer premium saloon with extra legroom and boot space.",
+    photo: unsplash("photo-1714434087684-a2f4816ca832"),
+    photoAlt: "Black premium saloon parked outside a building",
+    crop: "&crop=focalpoint&fp-x=0.5&fp-y=0.56&fp-z=1.5",
+    credit: "Rana Singh on Unsplash",
+  },
+  executive: {
+    model: "Mercedes C-Class, E-Class or similar",
+    description: "An executive car for business travel and a quieter ride.",
+    photo: unsplash("photo-1592309905620-e5b59f6dcb98"),
+    photoAlt: "Front of a black Mercedes saloon at dusk",
+    crop: "",
+    credit: "Artur Kulagin on Unsplash",
+  },
+  luxury: {
+    model: "Mercedes S-Class or similar",
+    description: "Our flagship car for VIP guests, roadshows and special occasions.",
+    photo: unsplash("photo-1610099610040-ab19f3a5ec35"),
+    photoAlt: "Black Mercedes S-Class on a cobbled street",
+    crop: "&crop=focalpoint&fp-x=0.52&fp-y=0.6&fp-z=1.25",
+    credit: "Martin Katler on Unsplash",
+  },
+  mpv: {
+    model: "7-seater MPV, Mercedes V-Class or similar",
+    description: "Room for up to 6 passengers and their luggage. Ideal for families and teams.",
+    photo: unsplash("photo-1765461734605-34657fa04db2"),
+    photoAlt: "Black Mercedes people carrier with headlights on",
+    crop: "",
+    credit: "William G on Unsplash",
+  },
 } as const;
+
+/**
+ * Image URL from Unsplash's CDN at a given size (it resizes, crops and picks the format).
+ * `crop` holds optional focal-point parameters that frame the car.
+ */
+export function fleetPhoto(photo: { photo: string; crop: string }, width: number, height: number) {
+  return `${photo.photo}?auto=format&fit=crop&w=${width}&h=${height}&q=70${photo.crop}`;
+}
 
 export const HOW_IT_WORKS = [
   {
@@ -58,7 +107,7 @@ export const HOW_IT_WORKS = [
   {
     step: "3",
     title: "Meet your chauffeur",
-    body: "At your door in E14, or in arrivals with your name on a board. Driver details arrive by text.",
+    body: "At your door, your office or in arrivals with your name on a board. Driver details arrive by text.",
   },
 ] as const;
 
@@ -70,7 +119,10 @@ export const CONTACT = {
   mobileHref: "tel:+447514347772",
   whatsappDisplay: "+44 7514 347772",
   whatsappHref: `https://wa.me/447514347772?text=${encodeURIComponent(
-    "Hello Capital Lane, I would like to book an airport transfer.",
+    "Hello Capital Lane, I would like to book a transfer.",
+  )}`,
+  whatsappBusinessHref: `https://wa.me/447514347772?text=${encodeURIComponent(
+    "Hello Capital Lane, I would like to set up a business account with invoicing.",
   )}`,
   // Placeholders: clearly marked until Capital Lane Ltd supplies the real details.
   companyNumber: "[company no. to add]",
@@ -96,19 +148,38 @@ export const ROUTES = [
   },
 ] as const;
 
+export const CORPORATE = [
+  {
+    title: "Invoice on request",
+    body: "Ask for an invoice on any journey, with your company name, VAT and a reference such as a cost code or PO.",
+  },
+  {
+    title: "Monthly account billing",
+    body: "Approved business accounts can book through the month and settle with one invoice.",
+  },
+  {
+    title: "Guests and roadshows",
+    body: "Book for clients, visitors and staff. We meet them in arrivals and keep you updated.",
+  },
+  {
+    title: "Priority service",
+    body: "A named contact for your bookings, and executive cars held for your regular journeys.",
+  },
+] as const;
+
 // SAMPLE reviews for layout only. Replace with real Google / Trustpilot reviews before launch.
 export const SAMPLE_REVIEWS = [
   {
     quote:
       "Driver was waiting outside our building ten minutes early. The fare was exactly what the website said, nothing added.",
     name: "Sample reviewer A",
-    trip: "Canary Wharf to Heathrow T5",
+    trip: "Mayfair to Heathrow T5",
   },
   {
     quote:
       "Flight landed 40 minutes late and the chauffeur was still there with a name board. No extra charge.",
     name: "Sample reviewer B",
-    trip: "Gatwick North to E14",
+    trip: "Gatwick North to the City",
   },
   {
     quote:

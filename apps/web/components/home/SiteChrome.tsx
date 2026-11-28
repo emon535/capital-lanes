@@ -11,8 +11,9 @@ export function SiteNav() {
           <Image className="w" src="/brand/logo-word.png" alt={COMPANY.brandName} width={1111} height={118} loading="eager" />
         </Link>
         <div className="nav-links">
-          <Link href="/#routes">Airport transfers</Link>
+          <Link href="/#routes">Airports</Link>
           <Link href="/#fleet">Fleet</Link>
+          <Link href="/#business">Business</Link>
           <Link href="/#how">How it works</Link>
           <Link href="/#reviews">Reviews</Link>
           <Link href="/#contact">Contact</Link>
@@ -41,7 +42,7 @@ export function SiteFooter() {
               <Image className="w" src="/brand/logo-word.png" alt={COMPANY.brandName} width={1111} height={118} />
             </div>
             <p style={{ marginTop: 22, lineHeight: 1.75, maxWidth: 300 }}>
-              Pre-booked chauffeur airport transfers from Canary Wharf and Docklands.
+              Private executive transfers and chauffeur-driven airport journeys across London.
             </p>
             <p style={{ marginTop: 14, lineHeight: 1.9 }}>
               Phone: <a href={CONTACT.phoneHref}>{CONTACT.phoneDisplay}</a>
@@ -71,7 +72,9 @@ export function SiteFooter() {
               <li>
                 <Link href="/#fleet">Fleet</Link>
               </li>
-              <li>Business accounts</li>
+              <li>
+                <Link href="/#business">Business accounts</Link>
+              </li>
               <li>Contact</li>
             </ul>
           </div>

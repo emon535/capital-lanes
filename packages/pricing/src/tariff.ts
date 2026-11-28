@@ -11,6 +11,7 @@
 //   Business Comfort  £55 + £2.10 x mi        + £7       -> £110 / £130         £110 / £130
 //   Executive         £75 + £2.10 x mi        + £7       -> £130 / £150         £130 / £150
 //   Luxury            £72 + £3.15 x mi        + £7       -> £151 / £181         £150 / £180
+//   MPV (suggested)   £65 + £2.10 x mi        + £7       -> £120 / £140         £120 / £140
 //
 // The fixed fares still win on those two routes (see FIXED_ROUTES).
 // Change any number here and the whole site follows.
@@ -31,7 +32,22 @@ export const DISTANCE_TARIFFS: Record<VehicleClass, DistanceTariff> = {
   "business-comfort": { baseFeePence: 5500, perMilePence: 210, minimumFarePence: 6000 },
   executive: { baseFeePence: 7500, perMilePence: 210, minimumFarePence: 8000 },
   luxury: { baseFeePence: 7200, perMilePence: 315, minimumFarePence: 8500 },
+  // SUGGESTED, waiting for Emon (28 Nov 2026).
+  mpv: { baseFeePence: 6500, perMilePence: 210, minimumFarePence: 7000 },
 };
+
+/** New customers get this much off their first journey. 0 switches the offer off. */
+export const FIRST_RIDE_DISCOUNT_PERCENT = 20;
+
+/**
+ * First-ride price: the fare less the discount, rounded down to whole pounds
+ * (in the customer's favour). Pure function: the booking system applies it again
+ * once it can tell a first-time customer from a returning one.
+ */
+export function firstRidePrice(pricePence: number, percent: number = FIRST_RIDE_DISCOUNT_PERCENT): number {
+  if (percent <= 0) return pricePence;
+  return Math.floor((pricePence * (100 - percent)) / 100 / 100) * 100;
+}
 
 export interface TariffExtras {
   /** Added when the drop-off is at an airport (airport drop-off charge). */

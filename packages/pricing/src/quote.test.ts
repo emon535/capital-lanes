@@ -11,6 +11,8 @@ const cases: Array<[Airport, VehicleClass, number]> = [
   ["gatwick", "business-comfort", 13000],
   ["gatwick", "executive", 15000],
   ["gatwick", "luxury", 18000],
+  ["heathrow", "mpv", 12000],
+  ["gatwick", "mpv", 14000],
 ];
 
 describe("quoteFixedFare from E14", () => {

@@ -1,14 +1,18 @@
 import Image from "next/image";
 import Link from "next/link";
-import { VEHICLE_CLASSES, VEHICLE_LABELS } from "@capitallanes/pricing";
+import { AIRPORT_LABELS, FIRST_RIDE_DISCOUNT_PERCENT, VEHICLE_CLASSES, VEHICLE_LABELS, VEHICLE_SPECS } from "@capitallanes/pricing";
 import { Car } from "@/components/home/Car";
 import {
   Arrow,
+  Bag,
   Board,
   Calendar,
   Card,
+  Chat,
   Check,
   Clock,
+  Gift,
+  Invoice,
   Person,
   Phone,
   Pin,
@@ -17,6 +21,7 @@ import {
   Seat,
   Shield,
   Star,
+  Users,
 } from "@/components/home/Icons";
 import { QuoteForm } from "@/components/home/QuoteForm";
 import { ScrollRoad } from "@/components/home/ScrollRoad";
@@ -27,13 +32,15 @@ import { WhatsAppCta } from "@/components/home/ContactCta";
 import {
   COMPANY,
   CONTACT,
+  CORPORATE,
   HOW_IT_WORKS,
   PROMISE,
   ROUTES,
   SAMPLE_REVIEWS,
   SIGNATURE_LINE,
   SITE_URL,
-  VEHICLE_DESCRIPTIONS,
+  VEHICLES,
+  fleetPhoto,
 } from "@/content/site";
 
 // Homepage rule: no prices or calculated fares here. Every price CTA leads to /quote.
@@ -49,16 +56,7 @@ const jsonLd = {
 };
 
 const PROMISE_ICONS = [Pound, Clock, Plane, Board, Calendar, Seat];
-
-const CAR_STYLES: Record<
-  (typeof VEHICLE_CLASSES)[number],
-  { top: string; bottom: string; hub: string; featured?: boolean }
-> = {
-  standard: { top: "#3a3a3a", bottom: "#141414", hub: "#8d8d8d" },
-  "business-comfort": { top: "#2e2e2e", bottom: "#0e0e0e", hub: "#b4b4b4" },
-  executive: { top: "#222", bottom: "#060606", hub: "#d6d6d6", featured: true },
-  luxury: { top: "#161616", bottom: "#000", hub: "#D4B06A" },
-};
+const BIZ_ICONS = [Invoice, Card, Board, Shield];
 
 const ROMAN = ["i.", "ii.", "iii."];
 
@@ -92,15 +90,15 @@ export default function HomePage() {
 
         <div className="wrap hero-inner">
           <div className="hero-copy">
-            <p className="eyebrow">Private chauffeur · Canary Wharf · London</p>
+            <p className="eyebrow">Private executive transfers · London</p>
             <h1>
               The quiet way
               <br />
               to <em>the airport.</em>
             </h1>
             <p className="lead">
-              Chauffeur-driven transfers from Canary Wharf to Heathrow and Gatwick. A fixed, all-in fare, your
-              name on a board in arrivals and an hour of free waiting.
+              Private executive transfers across London, to every airport, office and event. A fixed, all-in
+              fare, your name on a board in arrivals and an hour of free waiting.
             </p>
             <div className="ctas">
               <Link href="#quote" className="btn btn-gold">
@@ -112,7 +110,11 @@ export default function HomePage() {
             </div>
             <WhatsAppCta />
             <ul className="ticks">
-              {["Fixed, all-in fare", "Flight tracked", "Free cancellation 24 h"].map((t) => (
+              {[
+                "Fixed, all-in fare",
+                "Invoices for business",
+                `${FIRST_RIDE_DISCOUNT_PERCENT}% off your first ride`,
+              ].map((t) => (
                 <li key={t} className="text-gold">
                   <Check /> <span className="text-t2">{t}</span>
                 </li>
@@ -162,9 +164,9 @@ export default function HomePage() {
                   <div className="code" aria-hidden="true">
                     {r.code}
                   </div>
-                  <p className="from">From Canary Wharf · E14</p>
+                  <p className="from">From anywhere in London</p>
                   <h3>
-                    Canary Wharf <i aria-hidden="true">→</i>
+                    London <i aria-hidden="true">→</i>
                     <span className="sr-only"> to </span> {r.name}
                   </h3>
                   <div className="meta">
@@ -175,10 +177,10 @@ export default function HomePage() {
                       Terminals<b>{r.terminals}</b>
                     </div>
                     <div>
-                      Car classes<b>Four</b>
+                      Car classes<b>Five</b>
                     </div>
                   </div>
-                  <Link href={`/quote?from=e14&airport=${r.airport}`} className="btn btn-gold">
+                  <Link href={`/quote?to=${encodeURIComponent(AIRPORT_LABELS[r.airport])}`} className="btn btn-gold">
                     Calculate my {r.name} fare <Arrow />
                   </Link>
                 </article>
@@ -209,7 +211,7 @@ export default function HomePage() {
               <div>
                 <p className="eyebrow">The fleet</p>
                 <h2 className="h2" id="fleet-title">
-                  Four classes.
+                  Five classes.
                   <br />
                   One <em>standard.</em>
                 </h2>
@@ -221,26 +223,88 @@ export default function HomePage() {
             </div>
             <ul className="cars">
               {VEHICLE_CLASSES.map((v, i) => {
-                const s = CAR_STYLES[v];
+                const info = VEHICLES[v];
+                const spec = VEHICLE_SPECS[v];
+                const feat = v === "executive";
                 return (
-                  <li key={v} className={`carc${s.featured ? " feat" : ""}`}>
-                    {s.featured && <span className="tag">Most requested</span>}
-                    <span className="num">No. 0{i + 1}</span>
-                    <h3>{VEHICLE_LABELS[v]}</h3>
-                    <div className="pic">
-                      <Car id={v} width={250} bodyTop={s.top} bodyBottom={s.bottom} hub={s.hub} />
+                  <li key={v} className={`carc${feat ? " feat" : ""}`}>
+                    <div className="photo">
+                      {/* Unsplash serves resized images itself, so a plain img is enough here. */}
+                      {/* eslint-disable-next-line @next/next/no-img-element */}
+                      <img
+                        src={fleetPhoto(info, 560, 360)}
+                        srcSet={`${fleetPhoto(info, 560, 360)} 1x, ${fleetPhoto(info, 1120, 720)} 2x`}
+                        alt={info.photoAlt}
+                        width={560}
+                        height={360}
+                        loading="lazy"
+                      />
+                      {feat && <span className="tag">Most requested</span>}
                     </div>
-                    <p>{VEHICLE_DESCRIPTIONS[v]}</p>
-                    <Link href={`/quote?car=${v}`} className="go">
-                      <span>Get this price</span>
-                      <span className="text-gold">
-                        <Arrow />
-                      </span>
-                    </Link>
+                    <div className="txt">
+                      <span className="num">No. 0{i + 1}</span>
+                      <h3>{VEHICLE_LABELS[v]}</h3>
+                      <p className="model">{info.model}</p>
+                      <ul className="cap">
+                        <li>
+                          <Users size={15} /> Up to {spec.passengers} passengers
+                        </li>
+                        <li>
+                          <Bag size={15} /> {spec.suitcases} cases + {spec.handLuggage} small
+                        </li>
+                      </ul>
+                      <p>{info.description}</p>
+                      <Link href={`/quote?car=${v}${spec.passengers > 4 ? `&pax=${spec.passengers}` : ""}`} className="go">
+                        <span>Get this price</span>
+                        <span className="text-gold">
+                          <Arrow />
+                        </span>
+                      </Link>
+                    </div>
                   </li>
                 );
               })}
             </ul>
+            <p className="note fleet-note">Photos show the type of car. The car you get is of the same class or better.</p>
+          </div>
+        </section>
+
+        <section className="sec biz" id="business" aria-labelledby="biz-title">
+          <div className="wrap">
+            <div className="head">
+              <div>
+                <p className="eyebrow">For business</p>
+                <h2 className="h2" id="biz-title">
+                  Corporate travel,
+                  <br />
+                  <em>invoiced</em> properly.
+                </h2>
+              </div>
+              <p>
+                We look after companies, their staff and their guests. Every journey can be invoiced to your company,
+                and regular clients can settle the month on one account.
+              </p>
+            </div>
+            <ul className="biz-grid">
+              {CORPORATE.map((c, i) => (
+                <li key={c.title}>
+                  {(() => {
+                    const Icon = BIZ_ICONS[i] ?? Check;
+                    return <Icon size={24} strokeWidth={1.3} />;
+                  })()}
+                  <b>{c.title}</b>
+                  <span>{c.body}</span>
+                </li>
+              ))}
+            </ul>
+            <div className="biz-cta">
+              <a className="btn btn-gold" href={CONTACT.whatsappBusinessHref} target="_blank" rel="noopener noreferrer">
+                <Chat size={18} /> Open a business account
+              </a>
+              <a className="btn btn-dark" href={CONTACT.phoneHref}>
+                Call {CONTACT.phoneDisplay}
+              </a>
+            </div>
           </div>
         </section>
 
@@ -255,22 +319,28 @@ export default function HomePage() {
                 <em>Calculated</em> in seconds.
               </h2>
               <p>
-                Choose your airport, date and car. Your fixed fare appears instantly, and that is exactly what
-                you pay. No meter, no surge, no surprises at the end of the journey.
+                Tell us where, when and how many of you. Every car that fits appears with its fixed fare, and
+                that is exactly what you pay. No meter, no surge, no surprises at the end of the journey.
               </p>
             </div>
             <div className="calc">
               <div className="row">
                 <span>Pick-up</span>
-                <b>Canary Wharf, E14</b>
+                <b>Anywhere in London</b>
               </div>
               <div className="row">
                 <span>Destination</span>
-                <b>Heathrow or Gatwick</b>
+                <b>Airports, offices, events</b>
               </div>
               <div className="row">
                 <span>Car</span>
-                <b>Standard to Luxury</b>
+                <b>Saloon to 7-seater MPV</b>
+              </div>
+              <div className="row">
+                <span>First ride</span>
+                <b className="text-gold">
+                  <Gift size={16} /> {FIRST_RIDE_DISCOUNT_PERCENT}% off
+                </b>
               </div>
               <div className="lock">
                 <Shield size={24} strokeWidth={1.5} />
@@ -354,9 +424,9 @@ export default function HomePage() {
               <div>
                 <p className="eyebrow">Reviews</p>
                 <h2 className="h2" id="reviews-title">
-                  Trusted from
+                  Trusted across
                   <br />
-                  Canary Wharf.
+                  London.
                 </h2>
               </div>
               <div>
@@ -404,7 +474,7 @@ export default function HomePage() {
               <br />
               when you are.
             </h2>
-            <p>{SIGNATURE_LINE} Fixed, all-in fares to Heathrow and Gatwick, calculated in seconds.</p>
+            <p>{SIGNATURE_LINE} Fixed, all-in fares for private executive transfers, calculated in seconds.</p>
             <Link href="#quote" className="btn btn-gold">
               Calculate your price <Arrow />
             </Link>
