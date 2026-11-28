@@ -19,7 +19,7 @@ interface Fields {
   question: string | null;
 }
 
-const EXAMPLE = "Canary Wharf to Heathrow T5 on Friday at 6am, 3 people with 4 bags, business class car";
+const EXAMPLE = "Liverpool Street to Heathrow T5 on Friday at 6am, 5 people with 5 bags";
 
 /**
  * Two ways to start a quote: the normal form ("Calculate it yourself") or a

@@ -22,11 +22,11 @@ const cormorant = Cormorant_Garamond({
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
   title: {
-    default: `${COMPANY.brandName} | Chauffeur airport transfers from Canary Wharf`,
+    default: `${COMPANY.brandName} | Private executive transfers in London`,
     template: `%s | ${COMPANY.brandName}`,
   },
   description:
-    "Pre-booked chauffeur airport transfers from Canary Wharf (E14) to Heathrow and Gatwick. A fixed, all-in fare calculated in seconds, flight tracking and 60 minutes free waiting.",
+    "Private executive transfers and chauffeur-driven airport journeys across London, from saloon to S-Class and 7-seater MPV. A fixed, all-in fare, invoices for business clients and 20% off your first ride.",
   alternates: { canonical: "/" },
   icons: { icon: "/brand/logo-mark.png" },
   openGraph: {

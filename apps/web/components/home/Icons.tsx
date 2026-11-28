@@ -109,3 +109,28 @@ export const Chat = (p: P) => (
     <path d="M9.2 9.3c.2 1.9 1.9 4 4.1 4.9l1.2-1.1 1.8.9c-.2 1-1 1.6-2 1.6-3.2-.2-6.5-3.5-6.7-6.7 0-1 .6-1.8 1.6-2l.9 1.8z" />
   </Svg>
 );
+export const Users = (p: P) => (
+  <Svg {...p}>
+    <circle cx="9" cy="8" r="3.5" />
+    <path d="M2.5 20c0-3.5 3-5.5 6.5-5.5s6.5 2 6.5 5.5" />
+    <path d="M16 4.8a3.5 3.5 0 0 1 0 6.4M18 14.8c2 .7 3.5 2.4 3.5 5.2" />
+  </Svg>
+);
+export const Bag = (p: P) => (
+  <Svg {...p}>
+    <rect x="5" y="7" width="14" height="13" rx="2" />
+    <path d="M9 7V4.5h6V7M9 11v5M15 11v5" />
+  </Svg>
+);
+export const Invoice = (p: P) => (
+  <Svg {...p}>
+    <path d="M6 2.5h9l4 4V21.5l-2.5-1.5-2.5 1.5-2.5-1.5-2.5 1.5-2.5-1.5-1 .6z" />
+    <path d="M9 9h6M9 13h6M9 17h3" />
+  </Svg>
+);
+export const Gift = (p: P) => (
+  <Svg {...p}>
+    <rect x="3.5" y="8" width="17" height="4" rx="1" />
+    <path d="M5 12v9h14v-9M12 8v13M12 8S10.5 3.5 8 4.2C6 4.8 7 8 12 8zM12 8s1.5-4.5 4-3.8C18 4.8 17 8 12 8z" />
+  </Svg>
+);
